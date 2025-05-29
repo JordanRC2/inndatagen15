@@ -3,8 +3,10 @@ package ms.tiendagen15.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @TableGenerator(name = "productos")
 @Data
@@ -13,17 +15,33 @@ import lombok.NoArgsConstructor;
 public class Productos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String nombre;
+    @Column(name = "id_producto")
+    private Integer idProducto;
+    @Column(name= "nombre_producto")
+    private String nombreProducto;
+    @Column(name = "precio")
     private Double precio;
+    @Column(name = "categoria")
+    private String categoria;
+    @Column(name = "stock")
+    private Integer stock;
+    @Column(name ="activo" )
     private Boolean activo = true;
 
-    public String getNombre() {
-        return nombre;
+    public Integer getIdProducto() {
+        return idProducto;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setIdProducto(Integer idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
     }
 
     public Double getPrecio() {
@@ -34,7 +52,27 @@ public class Productos {
         this.precio = precio;
     }
 
-    public Double gatPrecio() {
-        return 0.0;
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 }
