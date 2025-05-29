@@ -6,15 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IDetallePedidoService {
-    List<DetallePedido> ListaActivos();
-    Optional<DetallePedido>buscarPorId(Integer id);
-    DetallePedido guaradar (DetallePedido detallePedido);
-    boolean borrarlogico(Integer id);
-    boolean borrarFisico(Integer id);
-
-    List<DetallePedido> listarActivos();
-
-    boolean borrarLogico(Integer id);
-
-    Object guardar(DetallePedido existente);
+    List<DetallePedido> readAll();
+    Optional<DetallePedido> readById(Integer id);
+    Integer create(DetallePedido detalle);
+    DetallePedido update(DetallePedido detalle);
+    String deleteById(Integer id);
+    Double calcularTotalPorDetalle(Integer idDetalle);
 }

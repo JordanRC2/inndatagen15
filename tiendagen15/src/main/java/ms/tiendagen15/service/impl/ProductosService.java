@@ -11,33 +11,54 @@ import java.util.Optional;
 
 @Service
 public class ProductosService implements IProductosService {
-
-
-    @Override
-    public List<Productos> ListaActivos() {
-        return List.of();
-    }
-
-    @Override
-    public Optional<Productos> buscarPorId(Integer id) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Productos guardar(Productos productos) {
-        return null;
-    }
-
-    @Override
-    public boolean borradologico(Integer id) {
-        return false;
-    }
-
-    @Override
-    public boolean borradoFisico(Integer id) {
-        return false;
-    }
-
     @Autowired
-    private ProductosRepository productosRepository;
+    private ProductosRepository productoRepository;
+
+    @Override
+    public List<Productos> readAll() {
+        return productoRepository.findAll()
+                .stream()
+                .filter(p -> Boolean.TRUE.equals(p.getActivo()))
+                .toList();
+    }
+
+    @Override
+    public Optional<Productos> readById(Integer id) {
+        return productoRepository.findById(id);
+    }
+
+    @Override
+    public Integer create(Productos producto) {
+        productoRepository.save(producto);
+        return producto.getIdProducto();
+    }
+
+    @Override
+    public Productos update(Productos producto) {
+        return productoRepository.save(producto);
+    }
+
+    @Override
+    public String deleteById(Integer id) {
+        Optional<Productos> opt = productoRepository.findById(id);
+        if (opt.isPresent()) {
+            Productos p = opt.get();
+            p.setActivo(false);
+            productoRepository.save(p);
+            return "Producto desactivado.";
+        }
+        return "Producto no encontrado.";
+    }
+
+    @Override
+    public List<Productos> findByCategoria(String categoria) {
+        return productoRepository.findByCategoria(categoria);
+    }
+
+    @Override
+    public Integer sumarStock(Integer x, Integer y) {
+        return x + y;
+    }
+
+
 }

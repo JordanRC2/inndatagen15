@@ -10,47 +10,45 @@ import java.util.List;
 import java.util.Optional;
 @Service
 public class DetallePedidoService implements IDetallePedidoService {
-
     @Autowired
     private DetallePedidoRepository detallePedidoRepository;
 
     @Override
-    public List<DetallePedido> ListaActivos() {
-        return List.of();
+    public List<DetallePedido> readAll() {
+        return detallePedidoRepository.findAll();
     }
 
     @Override
-    public Optional<DetallePedido> buscarPorId(Integer id) {
-        return Optional.empty();
+    public Optional<DetallePedido> readById(Integer id) {
+        return detallePedidoRepository.findById(id);
     }
 
     @Override
-    public DetallePedido guaradar(DetallePedido detallePedido) {
-        return null;
+    public Integer create(DetallePedido detalle) {
+        detallePedidoRepository.save(detalle);
+        return detalle.getId();
     }
 
     @Override
-    public boolean borrarlogico(Integer id) {
-        return false;
+    public DetallePedido update(DetallePedido detalle) {
+        return detallePedidoRepository.save(detalle);
     }
 
     @Override
-    public boolean borrarFisico(Integer id) {
-        return false;
+    public String deleteById(Integer id) {
+        Optional<DetallePedido> opt = detallePedidoRepository.findById(id);
+        if (opt.isPresent()) {
+            detallePedidoRepository.deleteById(id);
+            return "Detalle eliminado.";
+        }
+        return "Detalle no encontrado.";
     }
 
     @Override
-    public List<DetallePedido> listarActivos() {
-        return List.of();
+    public Double calcularTotalPorDetalle(Integer idDetalle) {
+        return detallePedidoRepository.findById(idDetalle)
+                .map(d -> d.getCantidad() * d.getProductos().getPrecio())
+                .orElse(0.0);
     }
 
-    @Override
-    public boolean borrarLogico(Integer id) {
-        return false;
-    }
-
-    @Override
-    public Object guardar(DetallePedido existente) {
-        return null;
-    }
 }

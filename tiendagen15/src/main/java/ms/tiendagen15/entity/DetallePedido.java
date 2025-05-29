@@ -9,19 +9,17 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "detalles_pedido")
 public class DetallePedido {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Column(name= "id_detalle")
+    @Column(name = "id_detalle")
     private Integer id;
+
+    private Integer cantidad;
+
     @ManyToOne
     @JoinColumn(name = "id_producto")
-   private Productos productos;
+    private Productos productos;
+
     private Boolean activo = true;
-
-    public Object getProducto() {
-        return null;
-    }
-
-    public void setProducto(Object producto) {
-    }
 }

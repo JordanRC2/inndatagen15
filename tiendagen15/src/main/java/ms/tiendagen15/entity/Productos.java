@@ -1,31 +1,32 @@
 package ms.tiendagen15.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Getter
-@Entity
-@TableGenerator(name = "productos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "productos")
 public class Productos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_producto")
     private Integer idProducto;
-    @Column(name= "nombre_producto")
+
+    @Column(name = "nombre_producto")
     private String nombreProducto;
+
     @Column(name = "precio")
     private Double precio;
+
     @Column(name = "categoria")
     private String categoria;
+
     @Column(name = "stock")
     private Integer stock;
-    @Column(name ="activo" )
+
+    @Column(name = "activo")
     private Boolean activo = true;
 
     public Integer getIdProducto() {

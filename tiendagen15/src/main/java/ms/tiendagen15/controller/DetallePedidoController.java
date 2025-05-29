@@ -12,49 +12,41 @@ import java.util.List;
 @RequestMapping ("/api/detalles-pedido")
 public class DetallePedidoController {
     @Autowired
-    private IDetallePedidoService service;
+    private IDetallePedidoService detalleService;
 
     @GetMapping
-    public List<DetallePedido> listarActivos() {
-        return service.listarActivos();
+    public List<DetallePedido> getAll() {
+        return detalleService.readAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DetallePedido> obtenerPorId(@PathVariable Integer id) {
-        return service.buscarPorId(id)
+    public ResponseEntity<DetallePedido> getById(@PathVariable Integer id) {
+        return detalleService.readById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody DetallePedido detalle) {
-        try {
-            return ResponseEntity.ok(service.guardar(detalle));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public DetallePedido create(@RequestBody DetallePedido d) {
+        detalleService.create(d);
+        return d;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody DetallePedido dp) {
-        return service.buscarPorId(id)
-                .map(existente -> {
-                    existente.setProducto(dp.getProducto());
-                    return ResponseEntity.ok(service.guardar(existente));
-                })
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<DetallePedido> update(@PathVariable Integer id, @RequestBody DetallePedido d) {
+        return detalleService.readById(id).map(existing -> {
+            d.setId(id);
+            return ResponseEntity.ok(detalleService.update(d));
+        }).orElse(ResponseEntity.notFound().build());
     }
 
-
-    @PutMapping("/borrar-logico/{id}")
-    public ResponseEntity<String> borrarLogico(@PathVariable Integer id) {
-        if (service.borrarLogico(id)) return ResponseEntity.ok("Borrado lógico exitoso");
-        return ResponseEntity.notFound().build();
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Integer id) {
+        return detalleService.deleteById(id);
     }
 
-    @DeleteMapping("/borrar-fisico/{id}")
-    public ResponseEntity<String> borrarFisico(@PathVariable Integer id) {
-        if (service.borrarFisico(id)) return ResponseEntity.ok("Borrado físico exitoso");
-        return ResponseEntity.notFound().build();
+    @GetMapping("/total/{id}")
+    public Double calcularTotal(@PathVariable Integer id) {
+        return detalleService.calcularTotalPorDetalle(id);
     }
 }

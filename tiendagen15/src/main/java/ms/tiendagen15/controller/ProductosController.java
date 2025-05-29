@@ -12,52 +12,43 @@ import java.util.List;
 @RequestMapping("api/productos")
 @CrossOrigin(origins = "*")
 public class ProductosController {
-
     @Autowired
-    private IProductosService service;
+    private IProductosService productoService;
 
     @GetMapping
-    public List<Productos> listarActivos() {
-        return service.ListaActivos();
+    public List<Productos> getAll() {
+        return productoService.readAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Productos> obtenerPorId(@PathVariable Integer id) {
-        return service.buscarPorId(id)
+    public ResponseEntity<Productos> getById(@PathVariable Integer id) {
+        return productoService.readById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Productos crear(@RequestBody Productos productos) {
-        return service.guardar(productos);
+    public Productos create(@RequestBody Productos p) {
+        productoService.create(p);
+        return p;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Productos> actualizar(@PathVariable Integer id, @RequestBody Productos p) {
-        return service.buscarPorId(id)
-                .map(existente -> {
-                    existente.setNombreProducto(p.getNombreProducto());
-                    existente.setPrecio(p.getPrecio());
-                    return ResponseEntity.ok(service.guardar(existente));
-                })
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Productos> update(@PathVariable Integer id, @RequestBody Productos p) {
+        return productoService.readById(id).map(existing -> {
+            p.setIdProducto(id);
+            return ResponseEntity.ok(productoService.update(p));
+        }).orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/borrar-logico/{id}")
-    public ResponseEntity<String> borrarLogico(@PathVariable Integer id) {
-        if (service.borradologico(id)) {
-            return ResponseEntity.ok("Borrado lógico exitoso");
-        }
-        return ResponseEntity.notFound().build();
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Integer id) {
+        return productoService.deleteById(id);
     }
 
-    @DeleteMapping("/borrar-fisico/{id}")
-    public ResponseEntity<String> borrarFisico(@PathVariable Integer id) {
-        if (service.borradoFisico(id)) {
-            return ResponseEntity.ok("Borrado físico exitoso");
-        }
-        return ResponseEntity.notFound().build();
+    @GetMapping("/categoria/{cat}")
+    public List<Productos> getByCategoria(@PathVariable String cat) {
+        return productoService.findByCategoria(cat);
     }
 }
 
