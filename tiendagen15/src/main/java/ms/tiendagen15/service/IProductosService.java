@@ -13,4 +13,6 @@ public interface IProductosService {
     String deleteById(Integer id);
     List<Productos> findByCategoria(String categoria);
     Integer sumarStock(Integer x, Integer y);
+    List<Productos>buscarProductosConPrecioMenorA(Double precio);
+    List<Productos> obtenerProductosConStockMenorA5(); // ← Declaración en el Service
 }

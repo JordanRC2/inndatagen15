@@ -14,12 +14,17 @@ public class DetallePedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_detalle")
     private Integer id;
-
-    private Integer cantidad;
-
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_producto")
-    private Productos productos;
+    private Productos idProducto;
 
     private Boolean activo = true;
+
+    public Double getCantidad() {
+        return 0.0;
+    }
+
+    public Productos getProductos() {
+        return this.idProducto;
+    }
 }

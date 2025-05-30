@@ -51,13 +51,23 @@ public class ProductosService implements IProductosService {
     }
 
     @Override
-    public List<Productos> findByCategoria(String categoria) {
+   public List<Productos> findByCategoria(String categoria) {
         return productoRepository.findByCategoria(categoria);
     }
 
     @Override
     public Integer sumarStock(Integer x, Integer y) {
         return x + y;
+    }
+
+    @Override
+    public List<Productos> buscarProductosConPrecioMenorA(Double precio) {
+        return productoRepository.findByPrecioLessThan(precio);
+    }
+
+    @Override
+    public List<Productos> obtenerProductosConStockMenorA5() {
+        return productoRepository.findProductosConStockBajo();
     }
 
 
