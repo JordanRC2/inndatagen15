@@ -11,8 +11,13 @@ import java.util.Optional;
 
 @Service
 public class ProductosService implements IProductosService {
+
+    private final ProductosRepository productoRepository;
+
     @Autowired
-    private ProductosRepository productoRepository;
+    public ProductosService(ProductosRepository productoRepository) {
+        this.productoRepository = productoRepository;
+    }
 
     @Override
     public List<Productos> readAll() {
@@ -51,7 +56,7 @@ public class ProductosService implements IProductosService {
     }
 
     @Override
-   public List<Productos> findByCategoria(String categoria) {
+    public List<Productos> findByCategoria(String categoria) {
         return productoRepository.findByCategoria(categoria);
     }
 
@@ -69,6 +74,4 @@ public class ProductosService implements IProductosService {
     public List<Productos> obtenerProductosConStockMenorA5() {
         return productoRepository.findProductosConStockBajo();
     }
-
-
 }
