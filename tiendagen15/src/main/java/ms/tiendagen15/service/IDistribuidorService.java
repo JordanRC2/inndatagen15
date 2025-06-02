@@ -5,5 +5,10 @@ import ms.tiendagen15.model.Distribuidor;
 import java.util.List;
 
 public interface IDistribuidorService {
-    public List<Distribuidor> readAll();
+    List<Distribuidor> readAll();
+    Distribuidor readById(Integer id);
+    Distribuidor create(Distribuidor distribuidor);
+    Distribuidor update(Integer id, Distribuidor distribuidor);
+    void delete(Integer id);
 }
+
