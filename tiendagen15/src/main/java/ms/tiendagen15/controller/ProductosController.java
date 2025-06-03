@@ -21,51 +21,92 @@ public class ProductosController {
 
     @GetMapping
     public List<ProductosDTO> getAll() {
-        List<ProductosDTO> productos = productoService.readAll().stream()
-                .map(ProductosDTO::new)
-                .collect(Collectors.toList());
-        Collections.reverse(productos);
-        return productos;
+        try {
+            List<ProductosDTO> productos = productoService.readAll().stream()
+                    .map(ProductosDTO::new)
+                    .collect(Collectors.toList());
+            Collections.reverse(productos);
+            return productos;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductosDTO> getById(@PathVariable Integer id) {
-        return productoService.readById(id)
-                .map(ProductosDTO::new)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        try {
+            return productoService.readById(id)
+                    .map(ProductosDTO::new)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @PostMapping
-    public Productos create(@RequestBody Productos p) {
-        productoService.create(p);
-        return p;
+    public ResponseEntity<Productos> create(@RequestBody Productos p) {
+        try {
+            productoService.create(p);
+            return ResponseEntity.ok(p);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Productos> update(@PathVariable Integer id, @RequestBody Productos p) {
-        return productoService.readById(id).map(existing -> {
-            p.setIdProducto(id);
-            return ResponseEntity.ok(productoService.update(p));
-        }).orElse(ResponseEntity.notFound().build());
+        try {
+            return productoService.readById(id).map(existing -> {
+                p.setIdProducto(id);
+                return ResponseEntity.ok(productoService.update(p));
+            }).orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Integer id) {
-        return productoService.deleteById(id);
+    public ResponseEntity<String> delete(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(productoService.deleteById(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error al eliminar el producto.");
+        }
     }
 
     @GetMapping("/categoria/{cat}")
-    public List<Productos> getByCategoria(@PathVariable String cat) {
-        return productoService.findByCategoria(cat);
+    public ResponseEntity<List<Productos>> getByCategoria(@PathVariable String cat) {
+        try {
+            return ResponseEntity.ok(productoService.findByCategoria(cat));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(Collections.emptyList());
+        }
     }
-
 
     @GetMapping("/precio-menos-de-20")
-    public List<Productos> getProductosConPrecioMenorA20() {
-        return productoService.buscarProductosConPrecioMenorA(20.0);
+    public ResponseEntity<List<Productos>> getProductosConPrecioMenorA20() {
+        try {
+            return ResponseEntity.ok(productoService.buscarProductosConPrecioMenorA(20.0));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(Collections.emptyList());
+        }
     }
-    public List<Productos>getProductosConStockBajo(){
-        return productoService.obtenerProductosConStockMenorA5();
+
+    @GetMapping("/stock-bajo")
+    public ResponseEntity<List<Productos>> getProductosConStockBajo() {
+        try {
+            return ResponseEntity.ok(productoService.obtenerProductosConStockMenorA5());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(Collections.emptyList());
+        }
     }
 }

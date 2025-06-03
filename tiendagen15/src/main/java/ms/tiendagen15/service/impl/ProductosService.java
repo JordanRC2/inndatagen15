@@ -6,6 +6,7 @@ import ms.tiendagen15.service.IProductosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,11 +22,17 @@ public class ProductosService implements IProductosService {
 
     @Override
     public List<Productos> readAll() {
-        return productoRepository.findAll()
-                .stream()
-                .filter(p -> Boolean.TRUE.equals(p.getActivo()))
-                .toList();
+        try {
+            return productoRepository.findAll()
+                    .stream()
+                    .filter(p -> Boolean.TRUE.equals(p.getActivo()))
+                    .toList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
+
 
     @Override
     public Optional<Productos> readById(Integer id) {

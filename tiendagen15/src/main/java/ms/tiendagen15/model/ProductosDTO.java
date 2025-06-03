@@ -7,7 +7,7 @@ public class ProductosDTO {
     private Double precio;
     private String categoria;
 
-    // Constructor que recibe entidad Productos para mapear campos
+
     public ProductosDTO(Productos producto) {
         this.nombreProducto = producto.getNombreProducto();
         this.precio = producto.getPrecio();

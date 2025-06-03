@@ -16,37 +16,67 @@ public class DetallePedidoController {
 
     @GetMapping
     public List<DetallePedido> getAll() {
-        return detalleService.readAll();
+        try {
+            return detalleService.readAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of(); // Lista vacía si hay error
+        }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DetallePedido> getById(@PathVariable Integer id) {
-        return detalleService.readById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        try {
+            return detalleService.readById(id)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @PostMapping
-    public DetallePedido create(@RequestBody DetallePedido d) {
-        detalleService.create(d);
-        return d;
+    public ResponseEntity<DetallePedido> create(@RequestBody DetallePedido d) {
+        try {
+            detalleService.create(d);
+            return ResponseEntity.ok(d);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<DetallePedido> update(@PathVariable Integer id, @RequestBody DetallePedido d) {
-        return detalleService.readById(id).map(existing -> {
-            d.setId(id);
-            return ResponseEntity.ok(detalleService.update(d));
-        }).orElse(ResponseEntity.notFound().build());
+        try {
+            return detalleService.readById(id).map(existing -> {
+                d.setId(id);
+                return ResponseEntity.ok(detalleService.update(d));
+            }).orElse(ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Integer id) {
-        return detalleService.deleteById(id);
+    public ResponseEntity<String> delete(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(detalleService.deleteById(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error al eliminar el detalle_de_pedido.");
+        }
     }
 
     @GetMapping("/total/{id}")
-    public Double calcularTotal(@PathVariable Integer id) {
-        return detalleService.calcularTotalPorDetalle(id);
+    public ResponseEntity<Double> calcularTotal(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(detalleService.calcularTotalPorDetalle(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }
